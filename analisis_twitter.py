@@ -7,37 +7,45 @@ import matplotlib.pyplot as plt
 print("PROYECTO: ANALISIS DE SENTIMIENTOS DE X")
 print("----------------------------------------")
 
-# Leer el archivo JSON
-with open("publicaciones.json", "r", encoding="utf-8") as documento:
-    datos = json.load(documento)
+# 1. Leer los datos del archivo JSON
+try:
+    with open("publicaciones.json", "r", encoding="utf-8") as documento:
+        datos = json.load(documento)
 
-publicaciones = datos["publicaciones"]
+    publicaciones = datos["publicaciones"]
 
-# Palabras clave para identificar sentimientos
+except FileNotFoundError:
+    print("Error: No se encontro el archivo publicaciones.json")
+    raise SystemExit
+
+except (json.JSONDecodeError, KeyError):
+    print("Error: El archivo JSON no tiene el formato esperado.")
+    raise SystemExit
+
+# 2. Definir palabras clave
 palabras_positivas = [
-    "feliz", "excelente", "increíble", "encanta",
-    "motivado", "emocionado", "interesante", "éxito"
+    "feliz", "excelente", "increible", "encanta",
+    "motivado", "emocionado", "interesante", "exito"
 ]
 
 palabras_negativas = [
-    "decepcionado", "mal", "perdí", "preocupado",
-    "problemas", "triste", "difícil", "frustrado"
+    "decepcionado", "mal", "perdi", "preocupado",
+    "problemas", "triste", "dificil", "frustrado"
 ]
 
-# Clasificar el sentimiento de cada publicación
-
+# 3. Funcion para clasificar sentimientos
 def analizar_sentimiento(texto):
-    texto = texto.lower()
+
+    texto = str(texto).lower()
 
     expresiones_negativas = [
-        "no me gustó",
+        "no me gusto",
         "esperaba algo mejor"
     ]
 
     if any(expresion in texto for expresion in expresiones_negativas):
         return "Negativo"
 
-    # Identificar palabras completas, evitando coincidencias parciales
     palabras_texto = set(
         re.findall(r"\b[\wáéíóúüñ]+\b", texto)
     )
@@ -53,53 +61,55 @@ def analizar_sentimiento(texto):
         return "Neutral"
 
 
-    # Detectar expresiones negativas completas
-    expresiones_negativas = [
-        "no me gustó",
-        "esperaba algo mejor"
-    ]
+# 4. Crear DataFrame con Pandas
+df = pd.json_normalize(publicaciones)
 
-    if any(expresion in texto for expresion in expresiones_negativas):
-        return "Negativo"
+# Verificar que existan las columnas necesarias
+columnas_necesarias = ["id", "usuario", "texto"]
 
-    positivas = sum(
-        palabra in texto for palabra in palabras_positivas
-    )
+if not all(columna in df.columns for columna in columnas_necesarias):
+    print("Error: Faltan columnas necesarias en el archivo JSON.")
+    raise SystemExit
 
-    negativas = sum(
-        palabra in texto for palabra in palabras_negativas
-    )
+if df.empty:
+    print("No hay publicaciones para analizar.")
+    raise SystemExit
 
-    if positivas > negativas:
-        return "Positivo"
-    elif negativas > positivas:
-        return "Negativo"
-    else:
-        return "Neutral"
-
-
-# Crear una tabla con Pandas
-df = pd.DataFrame(publicaciones)
-
-# Aplicar el análisis a los textos
+# 5. Aplicar el analisis de sentimientos
 df["sentimiento"] = df["texto"].apply(analizar_sentimiento)
 
-# Mostrar los resultados
-print("\nRESULTADOS DEL ANALISIS DE SENTIMIENTOS")
+# 6. Mostrar publicaciones clasificadas
+print("\nRESULTADOS DEL ANALISIS")
 print("----------------------------------------")
-print(df[["id", "usuario", "texto", "sentimiento"]].to_string(index=False))
 
-# Contar publicaciones por sentimiento
-resumen = df["sentimiento"].value_counts()
+print(
+    df[["id", "usuario", "texto", "sentimiento"]]
+    .to_string(index=False)
+)
+
+# 7. Calcular cantidades y porcentajes
+categorias = ["Positivo", "Negativo", "Neutral"]
+
+resumen = df["sentimiento"].value_counts().reindex(
+    categorias, fill_value=0
+)
+
+porcentajes = (resumen / len(df)) * 100
 
 print("\nRESUMEN DE SENTIMIENTOS")
 print("----------------------------------------")
-print(resumen)
 
-# Crear una figura con dos graficas
+for categoria in categorias:
+    print(
+        f"{categoria}: {resumen[categoria]} "
+        f"publicaciones ({porcentajes[categoria]:.1f}%)"
+    )
+
+print(f"\nTotal de publicaciones analizadas: {len(df)}")
+
+# 8. Crear graficas
 fig, ejes = plt.subplots(1, 2, figsize=(12, 5))
 
-# Grafica de barras
 resumen.plot(
     kind="bar",
     ax=ejes[0],
@@ -110,7 +120,6 @@ ejes[0].set_xlabel("Sentimiento")
 ejes[0].set_ylabel("Cantidad de publicaciones")
 ejes[0].tick_params(axis="x", rotation=0)
 
-# Grafica circular
 resumen.plot(
     kind="pie",
     autopct="%1.1f%%",
@@ -120,18 +129,23 @@ resumen.plot(
 
 ejes[1].set_ylabel("")
 
-# Ajustar espacios y mostrar graficas
 plt.tight_layout()
+
+# 9. Guardar grafica
 plt.savefig("grafica_sentimientos.png", dpi=300)
-plt.show()
 
-print("\nGrafica guardada como grafica_sentimientos.png")
-
-# Exportar resultados a un archivo CSV
+# 10. Exportar resultados a CSV
 df.to_csv(
     "resultados_sentimientos.csv",
     index=False,
     encoding="utf-8-sig"
 )
 
-print("Resultados guardados en resultados_sentimientos.csv")
+print("\nARCHIVOS GENERADOS")
+print("----------------------------------------")
+print("Grafica: grafica_sentimientos.png")
+print("Resultados: resultados_sentimientos.csv")
+
+plt.show()
+
+print("\nAnalisis finalizado correctamente.")
