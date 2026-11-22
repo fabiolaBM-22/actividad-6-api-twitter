@@ -1,0 +1,65 @@
+
+{
+    "publicaciones": [
+        {
+            "id": 1,
+            "usuario": "usuario01",
+            "texto": "Estoy muy feliz porque hoy conseguí el trabajo que quería.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 2,
+            "usuario": "usuario02",
+            "texto": "El servicio fue excelente, recibí una atención increíble.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 3,
+            "usuario": "usuario03",
+            "texto": "Me encanta aprender cosas nuevas de programación.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 4,
+            "usuario": "usuario04",
+            "texto": "Estoy muy decepcionado con los resultados del proyecto.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 5,
+            "usuario": "usuario05",
+            "texto": "Qué mal servicio, perdí mucho tiempo esperando.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 6,
+            "usuario": "usuario06",
+            "texto": "No me gustó la experiencia, esperaba algo mejor.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 7,
+            "usuario": "usuario07",
+            "texto": "Hoy fue un día normal, sin novedades importantes.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 8,
+            "usuario": "usuario08",
+            "texto": "La película estuvo bastante interesante.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 9,
+            "usuario": "usuario09",
+            "texto": "Estoy preocupado por los problemas económicos.",
+            "fecha": "2026-11-20"
+        },
+        {
+            "id": 10,
+            "usuario": "usuario10",
+            "texto": "Me siento motivado y emocionado por mis nuevos proyectos.",
+            "fecha": "2026-11-20"
+        }
+    ]
+}

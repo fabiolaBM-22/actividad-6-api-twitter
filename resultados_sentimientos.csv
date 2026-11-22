@@ -1,0 +1,11 @@
+﻿id,usuario,texto,fecha,sentimiento
+1,usuario01,Estoy muy feliz porque hoy conseguí el trabajo que quería.,2026-11-20,Positivo
+2,usuario02,"El servicio fue excelente, recibí una atención increíble.",2026-11-20,Positivo
+3,usuario03,Me encanta aprender cosas nuevas de programación.,2026-11-20,Positivo
+4,usuario04,Estoy muy decepcionado con los resultados del proyecto.,2026-11-20,Negativo
+5,usuario05,"Qué mal servicio, perdí mucho tiempo esperando.",2026-11-20,Negativo
+6,usuario06,"No me gustó la experiencia, esperaba algo mejor.",2026-11-20,Negativo
+7,usuario07,"Hoy fue un día normal, sin novedades importantes.",2026-11-20,Neutral
+8,usuario08,La película estuvo bastante interesante.,2026-11-20,Positivo
+9,usuario09,Estoy preocupado por los problemas económicos.,2026-11-20,Negativo
+10,usuario10,Me siento motivado y emocionado por mis nuevos proyectos.,2026-11-20,Positivo
